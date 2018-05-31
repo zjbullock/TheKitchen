@@ -44,7 +44,7 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
     private InputStream iStream=null;
     private String [] data;
 
-    public static ArrayList<recipeNames> recipeNamesArrayList = new ArrayList<>();
+    public static ArrayList<recipeNames> recipeNamesArrayList;
 
 
 
@@ -73,9 +73,7 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
 
         getData();
 
-        adapter=new ListViewAdapter(getContext());
-
-        // Pass results to ListViewAdapter Class
+        recipeNamesArrayList=new ArrayList<>();
 
         for(int i=0; i<data.length;i++){
             recipeNames recipeNames = new recipeNames(data[i]);
@@ -83,6 +81,8 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
             recipeNamesArrayList.add(recipeNames);
         }
 
+        // Pass results to ListViewAdapter Class
+        adapter=new ListViewAdapter(getContext());
 
         // Binds the Adapter to the ListView
         list.setAdapter(adapter);
