@@ -45,7 +45,7 @@
     <string name="title_activity_create_recipe">create_recipe</string>
     <string name ="recipe_name">Recipe Name</string>
 <string name = "servings">Servings</string>
-    <string name = "cook_time">Cook Time</string>
+    <string name = "cook_time">Cook time in minutes</string>
     <string name = "ingredients">Ingredients</string>
     <string name = "preparation">Preparation</string>
 <string name = "submit_recipe">Submit Recipe</string>
