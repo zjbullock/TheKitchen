@@ -1,6 +1,7 @@
 package com.example.zjbullock.thekitchen;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +15,20 @@ import java.util.Locale;
  * Created by Zjbullock on 11/12/2017.
  */
 
-public class ListViewAdapter extends BaseAdapter {
+class ListViewAdapter extends BaseAdapter {
 
-   Context mContext;
-    LayoutInflater inflater;
+    private Context mContext;
+    private LayoutInflater inflater;
     private ArrayList<recipeNames> arraylist;
 
-    public ListViewAdapter(Context context){
+    ListViewAdapter(ArrayList<recipeNames> recipeNames, Context context){
         mContext=context;
         inflater = LayoutInflater.from(mContext);
         this.arraylist = new ArrayList<>();
-        this.arraylist.addAll(FirstFragment.recipeNamesArrayList);
+        this.arraylist.addAll(recipeNames);
     }
 
-    public class ViewHolder{
+    private class ViewHolder{
         TextView name;
     }
 
@@ -35,12 +36,12 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return FirstFragment.recipeNamesArrayList.size();
+        return arraylist.size();
     }
 
     @Override
     public recipeNames getItem(int position) {
-        return FirstFragment.recipeNamesArrayList.get(position);
+        return arraylist.get(position);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ListViewAdapter extends BaseAdapter {
         final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.listview_item, null);
+            convertView = inflater.inflate(R.layout.listview_item, parent, false);
 
             // Locate the TextViews in listview_item.xml
             holder.name = (TextView) convertView.findViewById(R.id.name);
@@ -62,22 +63,21 @@ public class ListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         // Set the results into TextViews
-        holder.name.setText(FirstFragment.recipeNamesArrayList.get(position).getRecipename());
+        holder.name.setText(arraylist.get(position).getRecipename());
         return convertView;
     }
 
-    public void filter(String charText) {
+     void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
-        FirstFragment.recipeNamesArrayList.clear();
-        if (charText.length() == 0) {
-            FirstFragment.recipeNamesArrayList.addAll(arraylist);
-        } else {
+        arraylist.clear();
+
+
             for (recipeNames wp : arraylist) {
                 if (wp.getRecipename().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    FirstFragment.recipeNamesArrayList.add(wp);
+                    arraylist.add(wp);
                 }
             }
-        }
+
         notifyDataSetChanged();
     }
 

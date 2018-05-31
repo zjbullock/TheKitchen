@@ -42,7 +42,7 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
     private InputStream iStream=null;
 
 
-    public static ArrayList<recipeNames> recipeNamesArrayList= new ArrayList<>();;
+    public static ArrayList<recipeNames> recipeNamesArrayList= new ArrayList<>();
 
 
 
@@ -73,7 +73,7 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
 
 
         // Pass results to ListViewAdapter Class
-        adapter=new ListViewAdapter(getContext());
+        adapter=new ListViewAdapter(recipeNamesArrayList,getContext());
 
         // Binds the Adapter to the ListView
         list.setAdapter(adapter);
@@ -99,10 +99,6 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
                 getContext().startActivity(createRecipeIntent);
             }
         });
-
-
-
-
 
 
         return view;
@@ -140,11 +136,11 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
 
         try{
             JSONArray jArray=new JSONArray(result);
-            JSONObject jObject=null;
+            JSONObject jObject;
 
 
 
-            for(int i=0; i<jArray.length();i++){
+            for(int i=jArray.length()-1; i>0;i--){
 
                 jObject=jArray.getJSONObject(i);
                 recipeNames recipeNames = new recipeNames(jObject.getString("recipename"));
@@ -164,8 +160,7 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        adapter.filter(text);
+        adapter.filter(newText);
         return false;
     }
 
