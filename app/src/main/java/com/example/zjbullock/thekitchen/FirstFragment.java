@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -25,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -42,9 +40,9 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
     private String line=null;
     private String result=null;
     private InputStream iStream=null;
-    private String [] data;
 
-    public static ArrayList<recipeNames> recipeNamesArrayList;
+
+    public static ArrayList<recipeNames> recipeNamesArrayList= new ArrayList<>();;
 
 
 
@@ -73,13 +71,6 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
 
         getData();
 
-        recipeNamesArrayList=new ArrayList<>();
-
-        for(int i=0; i<data.length;i++){
-            recipeNames recipeNames = new recipeNames(data[i]);
-            // Binds all strings into an array
-            recipeNamesArrayList.add(recipeNames);
-        }
 
         // Pass results to ListViewAdapter Class
         adapter=new ListViewAdapter(getContext());
@@ -151,11 +142,13 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
             JSONArray jArray=new JSONArray(result);
             JSONObject jObject=null;
 
-            data=new String[jArray.length()];
+
 
             for(int i=0; i<jArray.length();i++){
+
                 jObject=jArray.getJSONObject(i);
-                data[i]=jObject.getString("recipename");
+                recipeNames recipeNames = new recipeNames(jObject.getString("recipename"));
+                recipeNamesArrayList.add(recipeNames);
             }
         }
         catch(Exception e){
