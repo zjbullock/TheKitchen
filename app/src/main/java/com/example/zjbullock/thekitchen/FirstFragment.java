@@ -1,6 +1,7 @@
 package com.example.zjbullock.thekitchen;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,11 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -26,8 +38,13 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
     private ListView list;
     private ListViewAdapter adapter;
     private SearchView editsearch;
-    private String[] recipeList = new String[]{"Siracha Shrimp","Teriyaki Chicken","Lasagna","Spaghetti"}; // Generate sample data
-    public static ArrayList<recipeNames> recipeNamesArrayList = new ArrayList<recipeNames>();
+    private String address="https://zjbullock.000webhostapp.com/GetRecipes.php";
+    private String line=null;
+    private String result=null;
+    private InputStream iStream=null;
+    private String [] data;
+
+    public static ArrayList<recipeNames> recipeNamesArrayList = new ArrayList<>();
 
 
 
@@ -45,23 +62,26 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mainrecipefeed, container, false);
 
-
+        if(recipeNamesArrayList != null){
+            recipeNamesArrayList.clear();
+        }
 
         // Locate the ListView in listview_main.xml
         list = (ListView) view.findViewById(R.id.lvRecipes);
 
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
 
-        recipeNamesArrayList = new ArrayList<>();
+        getData();
 
-        for (int i = 0; i < recipeList.length; i++) {
-            recipeNames recipeNames = new recipeNames(recipeList[i]);
+        adapter=new ListViewAdapter(getContext());
+
+        // Pass results to ListViewAdapter Class
+
+        for(int i=0; i<data.length;i++){
+            recipeNames recipeNames = new recipeNames(data[i]);
             // Binds all strings into an array
             recipeNamesArrayList.add(recipeNames);
         }
-
-        // Pass results to ListViewAdapter Class
-       adapter = new ListViewAdapter(getContext());
-
 
 
         // Binds the Adapter to the ListView
@@ -99,7 +119,49 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
     }
 
 
+    private void getData(){
+        try {
+            URL url = new URL(address);
+            HttpURLConnection con=(HttpURLConnection)url.openConnection();
 
+            con.setRequestMethod("GET");
+
+            iStream=new BufferedInputStream(con.getInputStream());
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        try{
+            BufferedReader bReader=new BufferedReader(new InputStreamReader(iStream));
+            StringBuilder sBuilder=new StringBuilder();
+
+            while((line=bReader.readLine()) != null){
+                sBuilder.append(line+"\n");
+            }
+            iStream.close();
+            result=sBuilder.toString();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        try{
+            JSONArray jArray=new JSONArray(result);
+            JSONObject jObject=null;
+
+            data=new String[jArray.length()];
+
+            for(int i=0; i<jArray.length();i++){
+                jObject=jArray.getJSONObject(i);
+                data[i]=jObject.getString("recipename");
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
 
     @Override

@@ -23,7 +23,7 @@ public class ListViewAdapter extends BaseAdapter {
     public ListViewAdapter(Context context){
         mContext=context;
         inflater = LayoutInflater.from(mContext);
-        this.arraylist = new ArrayList<recipeNames>();
+        this.arraylist = new ArrayList<>();
         this.arraylist.addAll(FirstFragment.recipeNamesArrayList);
     }
 
