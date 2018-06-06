@@ -140,7 +140,7 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
 
 
 
-            for(int i=jArray.length()-1; i>0;i--){
+            for(int i=jArray.length()-1; i>=0;i--){
 
                 jObject=jArray.getJSONObject(i);
                 recipeNames recipeNames = new recipeNames(jObject.getString("recipename"));

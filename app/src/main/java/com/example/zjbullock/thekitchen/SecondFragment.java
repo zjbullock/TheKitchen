@@ -49,6 +49,11 @@ public class SecondFragment extends Fragment implements SearchView.OnQueryTextLi
 
         View view = inflater.inflate(R.layout.favorites,container,false);
 
+        if(favrecipeNamesArrayList != null){
+            favrecipeNamesArrayList.clear();
+        }
+
+
         // Locate the ListView in listview_main.xml
         favlistView = (ListView) view.findViewById(R.id.favRecipes);
 
@@ -112,7 +117,7 @@ public class SecondFragment extends Fragment implements SearchView.OnQueryTextLi
 
 
 
-            for(int i=jArray.length()-1; i>0;i--){
+            for(int i=jArray.length()-1; i>=0;i--){
 
                 jObject=jArray.getJSONObject(i);
                 recipeNames recipeNames = new recipeNames(jObject.getString("recipename"));
