@@ -43,6 +43,7 @@ public class SecondFragment extends Fragment implements SearchView.OnQueryTextLi
         super.onViewCreated(view, savedInstanceState);
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

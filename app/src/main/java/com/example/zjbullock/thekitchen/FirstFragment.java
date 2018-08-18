@@ -45,7 +45,6 @@ public class FirstFragment extends Fragment implements SearchView.OnQueryTextLis
     public static ArrayList<recipeNames> recipeNamesArrayList= new ArrayList<>();
 
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
